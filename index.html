@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="خطة عمل عقد إدارة الخدمات البيئية — صفحة تفاعلية قابلة للتعديل مع تصدير PDF.">
+<title>خطة الخدمات البيئية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+html{color-scheme:light}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<style>
+:root{
+  --navy:#1e2a78;
+  --navy-2:#27348b;
+  --ink:#1b2340;
+  --muted:#7c869c;
+  --line:#e3e8f3;
+  --chip:#eaf0fd;
+  --chip-ink:#2b3f8f;
+  --surface:#ffffff;
+  --ground:#f3f5fa;
+  --danger:#b03030;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Cairo',-apple-system,'Segoe UI',Tahoma,sans-serif;
+  background:var(--ground);
+  color:var(--ink);
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+button{font-family:inherit}
+#app{direction:rtl}
+
+/* toolbar */
+.toolbar{
+  position:sticky; top:env(safe-area-inset-top, 0px); z-index:50;
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  padding:10px 16px; background:var(--surface); border-bottom:1px solid var(--line);
+  box-shadow:0 2px 10px rgba(20,30,70,.06);
+}
+.toolbar .spacer{flex:1; min-width:0}
+.btn{
+  border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  padding:8px 14px; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+}
+.btn:hover{background:#f7f9ff; border-color:#c9d4ee}
+.btn:focus-visible,.add:focus-visible,.x:focus-visible,.newsec:focus-visible{outline:2px solid var(--navy); outline-offset:2px}
+.btn.primary{background:var(--navy); color:#fff; border-color:var(--navy)}
+.btn.primary:hover{background:var(--navy-2)}
+.btn.warn{color:var(--danger)}
+.hint{font-size:12px; color:var(--muted); white-space:nowrap}
+
+/* sheet */
+.sheet{
+  max-width:1500px; margin:16px auto 60px; background:var(--surface);
+  border-radius:14px; padding-block:22px 30px; padding-inline:16px;
+  box-shadow:0 6px 30px rgba(20,30,70,.07);
+}
+.head{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  border-bottom:2px solid var(--line); padding-bottom:16px; margin-bottom:16px;
+}
+.logo{
+  width:130px; height:60px; flex:0 0 auto; border-radius:10px;
+  border:1px dashed #c9d4ee; background:#f7f9ff;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); font-size:11px; cursor:pointer; overflow:hidden; text-align:center; padding:4px;
+}
+.logo img{max-width:100%; max-height:100%; object-fit:contain}
+.head h1{
+  flex:1; min-width:220px; text-align:center; margin:0;
+  font-size:clamp(19px,3.4vw,26px); font-weight:800; color:var(--navy); text-wrap:balance; outline:none;
+}
+.head .pad{width:130px; flex:0 0 auto}
+@media(max-width:720px){.head .pad{display:none}}
+
+.shifts{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:18px}
+.shift{
+  background:var(--surface); border:1px solid var(--line); border-radius:999px;
+  padding:6px 16px; font-size:13px; font-weight:600; color:var(--ink);
+  display:inline-flex; align-items:center; gap:8px;
+}
+.shift .dot{width:7px;height:7px;border-radius:50%;background:var(--navy);flex:0 0 auto}
+
+/* board */
+.board{column-count:3; column-gap:16px}
+@media(max-width:1100px){.board{column-count:2}}
+@media(max-width:700px){.board{column-count:1}}
+.card{
+  break-inside:avoid; -webkit-column-break-inside:avoid; page-break-inside:avoid;
+  display:inline-block; width:100%; margin:0 0 18px;
+}
+.card-title{
+  display:flex; align-items:center; gap:8px; margin:0 0 7px; padding:0 2px;
+  font-size:16px; font-weight:800; color:var(--ink);
+}
+.card-title .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;cursor:pointer}
+.card-title .t{flex:1; min-width:0; outline:none}
+.box{border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--surface)}
+.bar{
+  background:var(--navy); color:#fff; display:flex; align-items:center; gap:10px;
+  padding:9px 12px; font-size:13.5px; font-weight:700;
+}
+.bar .sup{flex:1; min-width:0; outline:none}
+.code{
+  background:rgba(255,255,255,.16); border-radius:5px; padding:2px 8px;
+  font-size:11.5px; font-weight:700; letter-spacing:.3px; outline:none; white-space:nowrap;
+}
+
+.row{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .who{flex:1; min-width:0}
+.row .name{font-size:13.5px; font-weight:700; outline:none; line-height:1.5}
+.row .sub{font-size:11px; color:var(--muted); outline:none; line-height:1.5}
+.badge{
+  background:var(--navy); color:#fff; border-radius:5px; padding:2px 7px;
+  font-size:11px; font-weight:700; outline:none; white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.leave{
+  background:var(--chip); color:var(--chip-ink); border:1px solid #d6e0f7;
+  border-radius:5px; padding:3px 8px; font-size:11px; font-weight:700; outline:none; white-space:nowrap;
+}
+.leave.empty{opacity:.35}
+.note{padding:12px; text-align:center; color:var(--muted); font-size:12.5px; outline:none; flex:1}
+.note-wrap{display:flex; align-items:center; padding:0 8px}
+
+.tblwrap{overflow-x:auto}
+table.tbl{width:100%; border-collapse:collapse; font-size:12.5px}
+table.tbl th{
+  background:var(--navy); color:#fff; font-weight:700; padding:7px 10px; text-align:center;
+  border-left:1px solid rgba(255,255,255,.15); outline:none;
+}
+table.tbl th:last-child{border-left:0}
+table.tbl td{
+  padding:7px 10px; text-align:center; border-bottom:1px solid var(--line);
+  border-left:1px solid var(--line); outline:none;
+}
+table.tbl td:last-child{border-left:0}
+table.tbl tr:last-child td{border-bottom:0}
+table.tbl td.k{font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums}
+
+/* edit affordances */
+.ctrl{display:none}
+#app.editing .ctrl{display:inline-flex}
+.x{
+  width:22px;height:22px;border-radius:5px;border:1px solid var(--line);background:var(--surface);
+  color:var(--danger); font-size:14px; line-height:1; cursor:pointer;
+  align-items:center; justify-content:center; flex:0 0 auto; padding:0;
+}
+.x:hover{background:#fff1f1;border-color:#f0c4c4}
+.add-bar{display:flex; gap:6px; padding:8px 10px; background:#fafbff; border-top:1px solid var(--line); flex-wrap:wrap}
+.add{
+  border:1px dashed #c9d4ee; background:var(--surface); color:var(--chip-ink);
+  border-radius:7px; padding:5px 10px; font-size:11.5px; font-weight:700; cursor:pointer;
+}
+.add:hover{background:#f2f6ff}
+#app.editing [contenteditable="true"]:hover{background:rgba(120,150,230,.10); border-radius:4px}
+#app.editing [contenteditable="true"]:focus{background:rgba(120,150,230,.18); border-radius:4px}
+#app.editing .bar [contenteditable="true"]:hover,
+#app.editing .bar [contenteditable="true"]:focus,
+#app.editing th[contenteditable="true"]:hover,
+#app.editing th[contenteditable="true"]:focus{background:rgba(255,255,255,.20)}
+.newsec{
+  width:100%; border:2px dashed #c9d4ee; background:#fafbff; color:var(--chip-ink);
+  border-radius:10px; padding:14px; font-size:14px; font-weight:700; cursor:pointer; margin-top:6px;
+}
+.newsec:hover{background:#f2f6ff}
+
+#toast{
+  position:fixed; bottom:calc(20px + env(safe-area-inset-bottom, 0px)); inset-inline-end:20px;
+  background:var(--navy); color:#fff; padding:10px 16px; border-radius:9px;
+  font-size:13px; font-weight:600; opacity:0; transform:translateY(8px);
+  transition:opacity .25s, transform .25s; pointer-events:none; z-index:99; max-width:80vw;
+}
+#toast.on{opacity:1; transform:none}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}}
+
+/* export options dialog */
+.modal{
+  position:fixed; inset:0; z-index:120; direction:rtl;
+  background:rgba(20,28,60,.45);
+  display:flex; align-items:center; justify-content:center; padding:16px;
+}
+.modal[hidden]{display:none!important}
+.modal-card{
+  background:var(--surface); color:var(--ink); border-radius:14px;
+  padding:20px; width:min(860px,100%); max-height:90vh; overflow-y:auto;
+  box-shadow:0 20px 60px rgba(15,22,55,.3);
+  font-family:'Cairo',-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+.modal-card.narrow{width:min(380px,100%)}
+.btn.danger{background:var(--danger); color:#fff; border-color:var(--danger)}
+.btn.danger:hover{background:#983030; border-color:#983030}
+.modal-grid{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap}
+.modal-opts{flex:1 1 250px; min-width:230px}
+.preview-pane{flex:1 1 330px; min-width:250px}
+.preview-head{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px;
+}
+.preview-box{
+  background:#eef1f7; border:1px solid var(--line); border-radius:10px;
+  padding:10px; max-height:46vh; overflow-y:auto;
+  display:flex; flex-direction:column; gap:10px; align-items:center;
+}
+.pv-page{
+  position:relative; direction:ltr; background:#fff; overflow:hidden;
+  border-radius:3px; box-shadow:0 2px 8px rgba(20,30,70,.18); flex:0 0 auto;
+}
+.pv-page > .pdfpage{position:absolute; transform-origin:top left}
+.pv-note{font-size:11px; color:var(--muted); text-align:center; padding:14px}
+.modal-card h3{margin:0 0 14px; font-size:17px; font-weight:800; color:var(--navy)}
+.fset{border:1px solid var(--line); border-radius:10px; padding:10px 12px 12px; margin:0 0 12px}
+.fset legend{font-size:12px; font-weight:700; color:var(--muted); padding:0 6px; letter-spacing:.2px}
+.opt{display:flex; align-items:center; gap:8px; padding:5px 2px; font-size:13.5px; font-weight:600; cursor:pointer}
+.fset.inline .opt{display:inline-flex; margin-inline-end:20px}
+.opt input{accent-color:var(--navy); width:16px; height:16px; flex:0 0 auto; margin:0}
+.modal-hint{margin:0 0 14px; font-size:12px; line-height:1.7; color:var(--muted)}
+.modal-actions{display:flex; gap:8px; justify-content:flex-start}
+
+/* offscreen stage used to compose PDF pages */
+#pdfStage{
+  position:fixed; inset-inline-start:-20000px; top:0; z-index:-1;
+  direction:rtl; background:#fff; color:var(--ink);
+  font-family:'Cairo',-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+#pdfStage,.pdfpage{direction:rtl}
+.pdfpage{
+  width:1123px; height:794px; background:#fff;
+  padding:28px; display:flex; flex-direction:column; gap:14px; overflow:hidden;
+}
+.pdfcols{display:flex; gap:16px; align-items:flex-start; flex:1}
+.pdfcol{flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:14px}
+.pdfpage .card{display:block; margin:0}
+.pdfhead{display:flex; align-items:center; gap:16px; border-bottom:2px solid var(--line); padding-bottom:12px}
+.pdfhead h2{flex:1; text-align:center; margin:0; font-size:24px; font-weight:800; color:var(--navy)}
+.pdfhead .lg{width:120px; height:54px; display:flex; align-items:center; justify-content:center}
+.pdfhead .lg img{max-width:100%; max-height:100%; object-fit:contain}
+.pdfhead .sp{width:120px}
+.pdfshifts{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+.pdffoot{text-align:center; font-size:11px; color:var(--muted)}
+
+@media print{
+  .toolbar,.add-bar,.ctrl,.newsec,#toast{display:none !important}
+  body{background:#fff}
+  .sheet{box-shadow:none; margin:0; max-width:none; padding:0}
+  .board{column-count:3}
+}
+</style>
+</head>
+<body>
+<div id="app" class="editing">
+  <div class="toolbar">
+    <button class="btn primary" id="toggleEdit" type="button">🔓 وضع التعديل</button>
+    <button class="btn" id="pdfBtn" type="button">📄 تنزيل PDF</button>
+    <button class="btn" id="printBtn" type="button">🖨️ طباعة</button>
+    <button class="btn" id="saveFile" type="button">⬇️ تنزيل نسخة HTML</button>
+    <div class="spacer"></div>
+    <span class="hint" id="status">جاري التحميل…</span>
+    <button class="btn warn" id="resetBtn" type="button">↺ استرجاع الأصل</button>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <div class="logo" id="logo" title="اضغط لإضافة الشعار">اضغط لإضافة الشعار</div>
+      <h1 id="mainTitle">خطة عمل عقد إدارة الخدمات البيئية</h1>
+      <div class="pad"></div>
+    </div>
+    <div class="shifts" id="shifts"></div>
+    <div class="board" id="board"></div>
+    <button class="newsec ctrl" id="addSection" type="button">＋ إضافة قسم جديد</button>
+  </div>
+</div>
+
+<div id="askModal" class="modal" hidden>
+  <div class="modal-card narrow" role="dialog" aria-modal="true" aria-labelledby="askTitle">
+    <h3 id="askTitle">تأكيد</h3>
+    <p class="modal-hint" id="askText"></p>
+    <div class="modal-actions">
+      <button class="btn" id="askNo" type="button">إلغاء</button>
+      <button class="btn danger" id="askYes" type="button">حذف</button>
+    </div>
+  </div>
+</div>
+
+<div id="pdfModal" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <h3 id="pdfModalTitle">خيارات تصدير PDF</h3>
+
+    <div class="modal-grid">
+    <div class="modal-opts">
+    <fieldset class="fset">
+      <legend>التوزيع</legend>
+      <label class="opt"><input type="radio" id="fitOne" name="pdfFit" value="one" checked><span>صفحة واحدة — كل الأقسام في صفحة</span></label>
+      <label class="opt"><input type="radio" id="fitAuto" name="pdfFit" value="auto"><span>عدة صفحات — بالحجم الطبيعي</span></label>
+    </fieldset>
+
+    <fieldset class="fset inline">
+      <legend>اتجاه الورقة</legend>
+      <label class="opt"><input type="radio" id="orLand" name="pdfOrient" value="landscape" checked><span>أفقي</span></label>
+      <label class="opt"><input type="radio" id="orPort" name="pdfOrient" value="portrait"><span>عمودي</span></label>
+    </fieldset>
+
+    <fieldset class="fset inline">
+      <legend>عدد الأعمدة</legend>
+      <label class="opt"><input type="radio" id="col3" name="pdfCols" value="3" checked><span>3</span></label>
+      <label class="opt"><input type="radio" id="col4" name="pdfCols" value="4"><span>4</span></label>
+      <label class="opt"><input type="radio" id="col5" name="pdfCols" value="5"><span>5</span></label>
+    </fieldset>
+
+    <p class="modal-hint" id="pdfHint"></p>
+    </div>
+
+    <div class="preview-pane">
+      <div class="preview-head">
+        <span>معاينة قبل التنزيل</span>
+        <span id="pvCount">—</span>
+      </div>
+      <div class="preview-box" id="pdfPreview"></div>
+    </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" id="pdfCancel" type="button">إلغاء</button>
+      <button class="btn primary" id="pdfGo" type="button">تصدير الملف</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="pdfStage" aria-hidden="true"></div>
+<input type="file" id="logoInput" accept="image/*" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script id="seed" type="application/json">
+{
+ "title":"خطة عمل عقد إدارة الخدمات البيئية",
+ "logo":null,
+ "shifts":["الدوام الصباحي: 6:00 صباحاً – 2:00 مساءً","الدوام المسائي: 3:00 مساءً – 11:00 مساءً"],
+ "sections":[
+  {"title":"المكافحة — الفرقة الصباحية","color":"#2f46c4","sup":"المراقب: السيد محمد حسن","code":"IV.2","blocks":[
+    {"type":"people","rows":[
+      {"code":"IV.2.2","name":"محمد سونا مياه محمد","sub":"كامل المدينة","leave":""},
+      {"code":"IV.2.3","name":"ظهير الإسلام","sub":"كامل المدينة","leave":""},
+      {"code":"IV.2.4","name":"شهاب الدين لاليت مياه","sub":"كامل المدينة","leave":""}]},
+    {"type":"table","headers":["السائق","رقم اللوحة","المعدة"],"rows":[["ساكيل هوبي","ب س ا 1149","رش ضبابي"]]}]},
+
+  {"title":"المكافحة — الفرقة المسائية","color":"#2f46c4","sup":"المراقب: محمد صديق عبدالرحمن","code":"IV.1","blocks":[
+    {"type":"people","rows":[
+      {"code":"IV.2.1","name":"جينا تالكودير محمد نجام","sub":"كامل المدينة","leave":""},
+      {"code":"IV.2.3","name":"عبدالقدير","sub":"كامل المدينة","leave":""}]},
+    {"type":"table","headers":["السائق","رقم اللوحة","المعدة"],"rows":[["ساكيل هوبي","ب س ا 1149","رش ضبابي"]]},
+    {"type":"table","headers":["الرقم","الاسم","العمالة المرافقة للمعدات"],"rows":[
+      ["II.3.11","ريبون فرهد علي","ضاغط المخلفات"],
+      ["II.3.22","محمد ربيع الإسلام","وايت الصرف الصحي"]]}]},
+
+  {"title":"السائقين والمعدات","color":"#18a08a","sup":"المراقب: سيف الاسلام","code":"II.2.1","blocks":[
+    {"type":"table","headers":["السائق","المعدة"],"rows":[
+      ["محمد نيروب","كنس الطرق"],
+      ["ريبون ريبون","كنس وغسل الطرق"],
+      ["كمال اكبر علي","قلاب"],
+      ["طارق ميا","شيول"],
+      ["محمد ميجرول","ضاغط المخلفات"],
+      ["شاه علم","وايت الصرف الصحي"]]}]},
+
+  {"title":"الطرق","color":"#e08421","sup":"المراقب: مصطفى كمال","code":"II.2.2","blocks":[
+    {"type":"people","rows":[
+      {"code":"II.3.14","name":"امينور محمد موزبيا موت","sub":"طريق 1","leave":""},
+      {"code":"II.3.2","name":"مد روبل عبد ال مالك","sub":"طريق 4 + التشغيل والصيانة","leave":""},
+      {"code":"II.3.5","name":"مد سومار علي","sub":"طريق 16","leave":""},
+      {"code":"II.3.19","name":"ميلان ميا حبير ميا","sub":"طريق 18 + أمن المنشآت","leave":""},
+      {"code":"II.3.8","name":"ابراهيم ميا عبدالحميد","sub":"طريق 5","leave":""}]}]},
+
+  {"title":"المبنى الرئيسي","color":"#2f46c4","sup":"المراقب: فارس محمد علي السبعي","code":"II.1.3","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.2","name":"محمد مهدي حسن","sub":"داخل المبنى","leave":""},
+      {"code":"III.3.7","name":"ادريس علي","sub":"داخل المبنى","leave":""},
+      {"code":"III.3.9","name":"مد سوزان احمد","sub":"داخل المبنى (مسائي)","leave":""},
+      {"code":"II.3.26","name":"محمد سويل نور اسلام","sub":"داخل المبنى","leave":""}]},
+    {"type":"table","headers":["الرقم","العمالة الخارجية","الموقع"],"rows":[
+      ["II.3.28","منيرل جمان مرسلم سك","خارجي"],
+      ["II.3.30","محمد جهانجير علام موفيز","خارجي"]]}]},
+
+  {"title":"الشؤون الفنية — سكني","color":"#18a08a","sup":"المراقب: خالد احمد معيض الزهراني","code":"III.1.1","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.5","name":"بهيم همبرم بدية همبرم","sub":"داخل المبنى","leave":""},
+      {"code":"II.3.36","name":"قمرول محمد أبو ال كلام","sub":"داخل المبنى","leave":""},
+      {"code":"II.3.37","name":"مد ياسين مد أمجد","sub":"داخل المبنى","leave":""}]},
+    {"type":"table","headers":["الرقم","العمالة الخارجية","الموقع"],"rows":[
+      ["II.3.35","محمد أ مالك محمد لال ميا","خارج المبنى"],
+      ["II.3.10","خورشيد علم الدين مياه","خارج المبنى"]]}]},
+
+  {"title":"الإنشاءات — سكني","color":"#18a08a","sup":"المراقب: موسى محمد عبده عقيلي","code":"II.1.1","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.10","name":"اخلاص الدين لال مياه","sub":"داخل المبنى","leave":""},
+      {"code":"III.3.6","name":"محمد سويل رنا محمد","sub":"داخل المبنى","leave":""}]},
+    {"type":"table","headers":["الرقم","العمالة الخارجية","الموقع"],"rows":[
+      ["II.3.3","همايون كبير","مواقف المبنى الرئيسي العلوية"]]}]},
+
+  {"title":"الشؤون الفنية — صناعي","color":"#e08421","sup":"المراقب: محمد علي حسين خويري","code":"II.1.1","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.1","name":"محمد سكيب احمد محمد","sub":"داخل المبنى","leave":""}]},
+    {"type":"table","headers":["الرقم","العمالة الخارجية","الموقع"],"rows":[
+      ["II.3.32","محمد ماد أوسين","داخل المبنى"]]}]},
+
+  {"title":"الشاطئ — الفرقة الصباحية","color":"#2f46c4","sup":"المراقب: محمد بلال","code":"II.1.2","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.4","name":"علي حسين","sub":"داخلي","leave":"إجازة الجمعة"},
+      {"code":"II.3.12","name":"مد حبيبو رحمان","sub":"طريق الملك عبدالله","leave":"إجازة الجمعة"},
+      {"code":"II.3.27","name":"محمد مشرف حسين","sub":"طريق الملك عبدالله","leave":"إجازة الجمعة"},
+      {"code":"II.3.13","name":"جيتو مياه","sub":"شاطئ خارجي","leave":"إجازة الأحد"},
+      {"code":"II.3.17","name":"صابر احمد","sub":"شاطئ خارجي","leave":"إجازة الاثنين"},
+      {"code":"II.3.24","name":"نيرول اسلام","sub":"شاطئ خارجي","leave":"إجازة الأحد"},
+      {"code":"II.3.16","name":"راسيل مد عبد السلام اكندو","sub":"شاطئ خارجي","leave":"إجازة الثلاثاء"}]}]},
+
+  {"title":"الشاطئ — الفرقة المسائية","color":"#2f46c4","sup":"المراقب: روبيل مياه مونجلا مياه","code":"II.2.3","blocks":[
+    {"type":"people","rows":[
+      {"code":"II.3.5","name":"محمد لامين أحمد محمد ساجان","sub":"داخلي - المصلى","leave":"إجازة الاثنين"},
+      {"code":"II.3.18","name":"ميتون علي","sub":"شاطئ خارجي","leave":"إجازة الأحد"},
+      {"code":"II.3.34","name":"أبو ال كلام عبد الميا","sub":"شاطئ خارجي","leave":"إجازة الاثنين"},
+      {"code":"II.3.25","name":"محمد جادو اسلام محمد رافيكل","sub":"شاطئ خارجي","leave":"إجازة الثلاثاء"},
+      {"code":"II.3.4","name":"مد سوزوخان","sub":"شاطئ خارجي","leave":"إجازة الأربعاء"}]}]},
+
+  {"title":"التشغيل والصيانة","color":"#18a08a","sup":"المراقب: علي احمد علي حقوي","code":"III.1.2","blocks":[
+    {"type":"people","rows":[
+      {"code":"III.3.11","name":"محمد كبير حسين مورال","sub":"داخل المبنى","leave":""},
+      {"code":"-","name":"لال مياه","sub":"داخل المبنى","leave":""}]}]},
+
+  {"title":"الأكاديمية","color":"#e08421","sup":"المراقب: علي احمد علي حقوي","code":"III.1.2","blocks":[
+    {"type":"note","text":"لا يوجد عمالة مسجلة حالياً"}]}
+ ]
+}
+</script>
+
+<script>
+(function(){
+"use strict";
+
+var KEY="rc_env_plan_v2";
+var seed=JSON.parse(document.getElementById("seed").textContent);
+function clone(o){return JSON.parse(JSON.stringify(o));}
+
+var state=clone(seed);
+try{
+  var raw=localStorage.getItem(KEY);
+  if(raw){var s=JSON.parse(raw); if(s&&s.sections) state=s;}
+}catch(e){}
+
+var remote=null;          /* db document reference when available */
+var saveTimer=null;
+var statusTimer=null;
+
+function $(s){return document.querySelector(s);}
+function el(tag,cls,txt){var n=document.createElement(tag); if(cls)n.className=cls; if(txt!=null)n.textContent=txt; return n;}
+function app(){return $("#app");}
+function editing(){return app().classList.contains("editing");}
+
+function setStatus(t,sticky){
+  var s=$("#status"); s.textContent=t;
+  clearTimeout(statusTimer);
+  if(!sticky) statusTimer=setTimeout(function(){s.textContent=idleStatus();},2200);
+}
+function idleStatus(){return remote?"محفوظ في الصفحة":"محفوظ في هذا المتصفح";}
+function toast(t){
+  var b=$("#toast"); b.textContent=t; b.classList.add("on");
+  setTimeout(function(){b.classList.remove("on");},2000);
+}
+
+function persist(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+  if(!remote) return Promise.resolve();
+  return remote.set({payload:JSON.stringify(state),updatedAt:new Date().toISOString()});
+}
+function save(){
+  clearTimeout(saveTimer);
+  setStatus("جاري الحفظ…",true);
+  saveTimer=setTimeout(function(){
+    persist().then(function(){setStatus("✓ تم الحفظ");})
+             .catch(function(){setStatus("تعذر الحفظ — التعديلات محفوظة في هذا المتصفح فقط");});
+  },500);
+}
+
+function ed(node,setter){
+  node.setAttribute("contenteditable",editing()?"true":"false");
+  node.addEventListener("input",function(){setter(node.textContent); save();});
+  node.addEventListener("paste",function(e){
+    e.preventDefault();
+    var t=(e.clipboardData||window.clipboardData).getData("text/plain");
+    document.execCommand("insertText",false,t.replace(/\s+/g," "));
+  });
+  node.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){e.preventDefault(); node.blur();}
+  });
+  return node;
+}
+function xbtn(fn,label){
+  var b=el("button","x ctrl","×");
+  b.type="button"; b.title=label||"حذف"; b.setAttribute("aria-label",label||"حذف");
+  b.addEventListener("click",function(e){e.preventDefault(); fn();});
+  return b;
+}
+
+function renderShifts(){
+  var w=$("#shifts"); w.textContent="";
+  state.shifts.forEach(function(s,i){
+    var d=el("div","shift");
+    d.appendChild(el("span","dot"));
+    d.appendChild(ed(el("span",null,s),function(v){state.shifts[i]=v;}));
+    d.appendChild(xbtn(function(){state.shifts.splice(i,1); save(); renderShifts();},"حذف الدوام"));
+    w.appendChild(d);
+  });
+  var add=el("button","add ctrl","＋ دوام");
+  add.type="button";
+  add.addEventListener("click",function(){state.shifts.push("دوام جديد: 00:00 – 00:00"); save(); renderShifts();});
+  w.appendChild(add);
+}
+
+function renderPeople(blk){
+  var wrap=el("div");
+  blk.rows.forEach(function(r,ri){
+    var row=el("div","row");
+    var who=el("div","who");
+    who.appendChild(ed(el("div","name",r.name),function(v){r.name=v;}));
+    who.appendChild(ed(el("div","sub",r.sub),function(v){r.sub=v;}));
+    row.appendChild(who);
+    row.appendChild(ed(el("span","badge",r.code||"—"),function(v){r.code=v;}));
+    var lv=ed(el("span","leave",r.leave?r.leave:"إجازة"),function(v){r.leave=v;});
+    if(!r.leave) lv.classList.add("empty");
+    lv.addEventListener("focus",function(){
+      if(lv.classList.contains("empty")){lv.textContent=""; lv.classList.remove("empty");}
+    });
+    lv.addEventListener("blur",function(){
+      if(!lv.textContent.trim()){r.leave=""; lv.textContent="إجازة"; lv.classList.add("empty"); save();}
+    });
+    row.appendChild(lv);
+    row.appendChild(xbtn(function(){blk.rows.splice(ri,1); save(); render();},"حذف العامل"));
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+
+function renderTable(sec,blk,bi){
+  var box=el("div");
+  var scroll=el("div","tblwrap");
+  var t=el("table","tbl");
+
+  var thead=el("thead"), htr=el("tr");
+  blk.headers.forEach(function(h,hi){
+    htr.appendChild(ed(el("th",null,h),function(v){blk.headers[hi]=v;}));
+  });
+  var thx=el("th"); thx.style.width="30px";
+  thx.appendChild(xbtn(function(){sec.blocks.splice(bi,1); save(); render();},"حذف الجدول"));
+  htr.appendChild(thx);
+  thead.appendChild(htr); t.appendChild(thead);
+
+  var tb=el("tbody");
+  blk.rows.forEach(function(row,ri){
+    var tr=el("tr");
+    blk.headers.forEach(function(h,ci){
+      tr.appendChild(ed(el("td",ci===0?"k":null,row[ci]!=null?row[ci]:""),function(v){row[ci]=v;}));
+    });
+    var tdx=el("td");
+    tdx.appendChild(xbtn(function(){blk.rows.splice(ri,1); save(); render();},"حذف الصف"));
+    tr.appendChild(tdx);
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  scroll.appendChild(t);
+  box.appendChild(scroll);
+
+  var bar=el("div","add-bar ctrl");
+  [["＋ صف",function(){blk.rows.push(blk.headers.map(function(){return "";}));}],
+   ["＋ عمود",function(){blk.headers.push("عمود"); blk.rows.forEach(function(r){r.push("");});}],
+   ["− عمود",function(){if(blk.headers.length>1){blk.headers.pop(); blk.rows.forEach(function(r){r.pop();});}}]
+  ].forEach(function(pair){
+    var b=el("button","add",pair[0]); b.type="button";
+    b.addEventListener("click",function(){pair[1](); save(); render();});
+    bar.appendChild(b);
+  });
+  box.appendChild(bar);
+  return box;
+}
+
+var PALETTE=["#2f46c4","#18a08a","#e08421","#b03060","#6b47c9","#3a3a3a"];
+
+function renderSection(sec,si){
+  var card=el("div","card");
+
+  var ttl=el("div","card-title");
+  var dot=el("span","dot");
+  dot.style.background=sec.color||PALETTE[0];
+  dot.title="تغيير اللون";
+  dot.addEventListener("click",function(){
+    if(!editing()) return;
+    sec.color=PALETTE[(PALETTE.indexOf(sec.color)+1)%PALETTE.length];
+    save(); render();
+  });
+  ttl.appendChild(dot);
+  ttl.appendChild(ed(el("span","t",sec.title),function(v){sec.title=v;}));
+  ttl.appendChild(xbtn(function(){
+    ask("حذف القسم «"+sec.title+"» بالكامل، بكل ما فيه من أسماء وجداول؟").then(function(ok){
+      if(ok){state.sections.splice(si,1); save(); render(); toast("تم حذف القسم");}
+    });
+  },"حذف القسم"));
+  card.appendChild(ttl);
+
+  var box=el("div","box");
+  var bar=el("div","bar");
+  bar.appendChild(ed(el("span","sup",sec.sup),function(v){sec.sup=v;}));
+  bar.appendChild(ed(el("span","code",sec.code),function(v){sec.code=v;}));
+  box.appendChild(bar);
+
+  sec.blocks.forEach(function(blk,bi){
+    if(blk.type==="people"){box.appendChild(renderPeople(blk));}
+    else if(blk.type==="table"){box.appendChild(renderTable(sec,blk,bi));}
+    else{
+      var w=el("div","note-wrap");
+      w.appendChild(ed(el("div","note",blk.text),function(v){blk.text=v;}));
+      w.appendChild(xbtn(function(){sec.blocks.splice(bi,1); save(); render();},"حذف الملاحظة"));
+      box.appendChild(w);
+    }
+  });
+
+  var ab=el("div","add-bar ctrl");
+  function addBtn(label,fn,title){
+    var b=el("button","add",label); b.type="button"; if(title)b.title=title;
+    b.addEventListener("click",fn); ab.appendChild(b);
+  }
+  addBtn("＋ عامل",function(){
+    var last=null,i;
+    for(i=sec.blocks.length-1;i>=0;i--){if(sec.blocks[i].type==="people"){last=sec.blocks[i];break;}}
+    if(!last){last={type:"people",rows:[]}; sec.blocks.push(last);}
+    last.rows.push({code:"",name:"اسم جديد",sub:"الموقع",leave:""});
+    save(); render();
+  });
+  addBtn("＋ جدول",function(){
+    sec.blocks.push({type:"table",headers:["الرقم","الاسم","الموقع"],rows:[["","",""]]});
+    save(); render();
+  });
+  addBtn("＋ ملاحظة",function(){sec.blocks.push({type:"note",text:"ملاحظة"}); save(); render();});
+  addBtn("▲",function(){
+    if(si>0){var a=state.sections.splice(si,1)[0]; state.sections.splice(si-1,0,a); save(); render();}
+  },"تحريك لأعلى");
+  addBtn("▼",function(){
+    if(si<state.sections.length-1){var a=state.sections.splice(si,1)[0]; state.sections.splice(si+1,0,a); save(); render();}
+  },"تحريك لأسفل");
+  box.appendChild(ab);
+
+  card.appendChild(box);
+  return card;
+}
+
+function render(){
+  var b=$("#board"); b.textContent="";
+  state.sections.forEach(function(s,i){b.appendChild(renderSection(s,i));});
+  renderShifts();
+  var h=$("#mainTitle");
+  if(h.textContent!==state.title) h.textContent=state.title;
+  var lg=$("#logo");
+  lg.textContent="";
+  if(state.logo){
+    var im=new Image(); im.src=state.logo; im.alt="شعار الجهة";
+    lg.appendChild(im); lg.style.border="1px solid var(--line)";
+  }else{
+    lg.textContent="اضغط لإضافة الشعار";
+    lg.style.border="1px dashed #c9d4ee";
+  }
+  syncEditable();
+}
+
+function syncEditable(){
+  var on=editing();
+  var nodes=document.querySelectorAll("#app [contenteditable]");
+  for(var i=0;i<nodes.length;i++) nodes[i].setAttribute("contenteditable",on?"true":"false");
+}
+
+/* ---------- toolbar ---------- */
+ed($("#mainTitle"),function(v){state.title=v;});
+
+$("#addSection").addEventListener("click",function(){
+  state.sections.push({
+    title:"قسم جديد",color:PALETTE[0],sup:"المراقب: ",code:"—",
+    blocks:[{type:"people",rows:[{code:"",name:"اسم جديد",sub:"الموقع",leave:""}]}]
+  });
+  save(); render();
+  window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+});
+
+$("#toggleEdit").addEventListener("click",function(){
+  var on=app().classList.toggle("editing");
+  $("#toggleEdit").textContent=on?"🔓 وضع التعديل":"🔒 وضع العرض";
+  syncEditable();
+});
+
+/* ---------- in-page confirmation (browser dialogs are blocked here) ---------- */
+var askResolve=null;
+function ask(text,yesLabel){
+  $("#askText").textContent=text;
+  $("#askYes").textContent=yesLabel||"حذف";
+  $("#askModal").hidden=false;
+  $("#askYes").focus();
+  return new Promise(function(res){askResolve=res;});
+}
+function closeAsk(v){
+  $("#askModal").hidden=true;
+  if(askResolve){var r=askResolve; askResolve=null; r(v);}
+}
+$("#askYes").addEventListener("click",function(){closeAsk(true);});
+$("#askNo").addEventListener("click",function(){closeAsk(false);});
+$("#askModal").addEventListener("click",function(e){ if(e.target===$("#askModal")) closeAsk(false); });
+
+/* ---------- PDF export ---------- */
+var PAD=28, GAP=16, CGAP=14;
+var pdfOpts={fit:"one", orient:"landscape", cols:3};
+
+function pageDims(o){return o==="portrait"?[794,1123]:[1123,794];}
+
+function staticCard(sec){
+  var card=el("div","card");
+  var ttl=el("div","card-title");
+  var dot=el("span","dot"); dot.style.background=sec.color||PALETTE[0];
+  ttl.appendChild(dot);
+  ttl.appendChild(el("span","t",sec.title));
+  card.appendChild(ttl);
+
+  var box=el("div","box");
+  var bar=el("div","bar");
+  bar.appendChild(el("span","sup",sec.sup));
+  bar.appendChild(el("span","code",sec.code));
+  box.appendChild(bar);
+
+  sec.blocks.forEach(function(blk){
+    if(blk.type==="people"){
+      var w=el("div");
+      blk.rows.forEach(function(r){
+        var row=el("div","row");
+        var who=el("div","who");
+        who.appendChild(el("div","name",r.name));
+        who.appendChild(el("div","sub",r.sub));
+        row.appendChild(who);
+        row.appendChild(el("span","badge",r.code||"—"));
+        if(r.leave) row.appendChild(el("span","leave",r.leave));
+        w.appendChild(row);
+      });
+      box.appendChild(w);
+    }else if(blk.type==="table"){
+      var t=el("table","tbl");
+      var thead=el("thead"), htr=el("tr");
+      blk.headers.forEach(function(h){htr.appendChild(el("th",null,h));});
+      thead.appendChild(htr); t.appendChild(thead);
+      var tb=el("tbody");
+      blk.rows.forEach(function(row){
+        var tr=el("tr");
+        blk.headers.forEach(function(h,ci){tr.appendChild(el("td",ci===0?"k":null,row[ci]!=null?row[ci]:""));});
+        tb.appendChild(tr);
+      });
+      t.appendChild(tb);
+      box.appendChild(t);
+    }else{
+      box.appendChild(el("div","note",blk.text));
+    }
+  });
+  card.appendChild(box);
+  return card;
+}
+
+function pageHeader(){
+  var h=el("div","pdfhead");
+  var lg=el("div","lg");
+  if(state.logo){var im=new Image(); im.src=state.logo; im.alt=""; lg.appendChild(im);}
+  h.appendChild(lg);
+  h.appendChild(el("h2",null,state.title));
+  h.appendChild(el("div","sp"));
+  return h;
+}
+function pageShifts(){
+  var w=el("div","pdfshifts");
+  state.shifts.forEach(function(s){
+    var d=el("div","shift");
+    d.appendChild(el("span","dot"));
+    d.appendChild(el("span",null,s));
+    w.appendChild(d);
+  });
+  return w;
+}
+
+/* measure every section once at the column width it will be laid out in */
+function measureSections(stage,colW){
+  var probe=el("div");
+  probe.style.width=colW+"px";
+  stage.appendChild(probe);
+  var items=state.sections.map(function(sec){
+    var node=staticCard(sec);
+    probe.appendChild(node);
+    var h=node.getBoundingClientRect().height;
+    probe.removeChild(node);
+    return {sec:sec,h:h};
+  });
+  stage.removeChild(probe);
+  return items;
+}
+
+function shortest(colH){
+  var k=0;
+  for(var i=1;i<colH.length;i++) if(colH[i]<colH[k]) k=i;
+  return k;
+}
+
+/* everything on ONE page: lay out tall, then scale the image down to fit */
+function buildSingle(opts){
+  var stage=$("#pdfStage");
+  stage.textContent="";
+
+  var W=opts.cols<=3?1400:(opts.cols===4?1780:2150);
+  var colW=Math.floor((W-PAD*2-GAP*(opts.cols-1))/opts.cols);
+  var items=measureSections(stage,colW);
+
+  var page=el("div","pdfpage");
+  page.style.width=W+"px";
+  page.style.height="auto";
+  page.appendChild(pageHeader());
+  page.appendChild(pageShifts());
+
+  var wrap=el("div","pdfcols");
+  var cols=[],colH=[],i;
+  for(i=0;i<opts.cols;i++){
+    var c=el("div","pdfcol");
+    c.style.flex="0 0 "+colW+"px";
+    wrap.appendChild(c); cols.push(c); colH.push(0);
+  }
+  page.appendChild(wrap);
+  stage.appendChild(page);
+
+  items.forEach(function(it){
+    var k=shortest(colH);
+    cols[k].appendChild(staticCard(it.sec));
+    colH[k]+=it.h+CGAP;
+  });
+  return [page];
+}
+
+/* natural pagination: fill pages, never split a section across two */
+function buildPaged(opts){
+  var stage=$("#pdfStage");
+  stage.textContent="";
+
+  var dims=pageDims(opts.orient), PW=dims[0], PH=dims[1];
+  var colW=Math.floor((PW-PAD*2-GAP*(opts.cols-1))/opts.cols);
+  var items=measureSections(stage,colW);
+
+  var pages=[], cols=null, colH=null, first=true, avail=0;
+
+  function newPage(){
+    var page=el("div","pdfpage");
+    page.style.width=PW+"px";
+    page.style.height=PH+"px";
+    if(first){
+      page.appendChild(pageHeader());
+      page.appendChild(pageShifts());
+    }
+    var wrap=el("div","pdfcols");
+    cols=[]; colH=[];
+    for(var i=0;i<opts.cols;i++){
+      var c=el("div","pdfcol");
+      wrap.appendChild(c); cols.push(c); colH.push(0);
+    }
+    page.appendChild(wrap);
+    stage.appendChild(page);
+    var offset=wrap.getBoundingClientRect().top-page.getBoundingClientRect().top;
+    avail=PH-offset-PAD-24;
+    pages.push(page);
+    first=false;
+  }
+
+  newPage();
+  items.forEach(function(it){
+    var k=shortest(colH);
+    var used=colH[k]?colH[k]+CGAP:0;
+    if(used+it.h>avail && (colH[0]||colH[1]||colH[2]||colH[3]||colH[4])){
+      newPage(); k=0;
+    }
+    cols[k].appendChild(staticCard(it.sec));
+    colH[k]=(colH[k]?colH[k]+CGAP:0)+it.h;
+  });
+
+  pages.forEach(function(p,i){
+    p.appendChild(el("div","pdffoot","صفحة "+(i+1)+" من "+pages.length));
+  });
+  return pages;
+}
+
+function exportPdf(opts){
+  if(!window.html2canvas||!window.jspdf){
+    toast("أدوات التصدير لم تُحمّل — تحقق من الاتصال وأعد المحاولة");
+    return;
+  }
+  var btn=$("#pdfBtn");
+  var label=btn.textContent;
+  btn.disabled=true;
+  btn.textContent="⏳ جاري التجهيز…";
+
+  var dims=pageDims(opts.orient), PW=dims[0], PH=dims[1];
+  var ready=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+
+  ready.then(function(){
+    var pdf=new window.jspdf.jsPDF({orientation:opts.orient,unit:"px",format:[PW,PH],compress:true});
+    var pages=(opts.fit==="one")?buildSingle(opts):buildPaged(opts);
+    var chain=Promise.resolve();
+
+    pages.forEach(function(p,i){
+      chain=chain.then(function(){
+        var rect=p.getBoundingClientRect();
+        return window.html2canvas(p,{
+          scale:2, backgroundColor:"#ffffff", logging:false, useCORS:true,
+          width:Math.ceil(rect.width), height:Math.ceil(rect.height)
+        });
+      }).then(function(canvas){
+        if(i>0) pdf.addPage([PW,PH],opts.orient);
+        var m=14;
+        var r=Math.min((PW-m*2)/canvas.width,(PH-m*2)/canvas.height);
+        var w=canvas.width*r, h=canvas.height*r;
+        pdf.addImage(canvas.toDataURL("image/jpeg",0.92),"JPEG",(PW-w)/2,(PH-h)/2,w,h);
+      });
+    });
+    return chain.then(function(){return pdf.output("blob");});
+  }).then(function(blob){
+    $("#pdfStage").textContent="";
+    var name="خطة-العمل.pdf";
+    if(window.claude&&window.claude.use){
+      return window.claude.use("downloads").then(function(d){
+        if(!d) throw new Error("no-downloads");
+        return d.save({filename:name,data:blob});
+      }).then(function(){toast("تم تنزيل ملف PDF");})
+        .catch(function(err){
+          if(err&&err.code==="declined") return;
+          blobFallback(blob,name);
+        });
+    }
+    blobFallback(blob,name);
+  }).catch(function(){
+    $("#pdfStage").textContent="";
+    toast("تعذر إنشاء ملف PDF");
+  }).then(function(){
+    btn.disabled=false; btn.textContent=label;
+  });
+}
+
+function blobFallback(blob,name){
+  try{
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+    toast("تم تجهيز الملف");
+  }catch(e){toast("التنزيل غير متاح هنا");}
+}
+
+/* ---------- export options dialog ---------- */
+function readOpts(){
+  var f=function(n){var x=document.querySelector('input[name="'+n+'"]:checked'); return x?x.value:null;};
+  return {
+    fit:f("pdfFit")||"one",
+    orient:f("pdfOrient")||"landscape",
+    cols:parseInt(f("pdfCols")||"3",10)
+  };
+}
+function syncColsHint(){
+  var o=readOpts();
+  var hint=$("#pdfHint");
+  hint.textContent = o.fit==="one"
+    ? "كل الأقسام في صفحة واحدة — الخط يصغر تلقائياً ليتسع الكل. زوّد الأعمدة لو صار الخط صغير."
+    : "الأقسام تتوزع على صفحات بحجم كامل، وما ينقسم أي قسم بين صفحتين.";
+}
+var pvTimer=null;
+function refreshPreview(){
+  clearTimeout(pvTimer);
+  $("#pvCount").textContent="…";
+  pvTimer=setTimeout(drawPreview,120);
+}
+function drawPreview(){
+  var box=$("#pdfPreview");
+  box.textContent="";
+  var o=readOpts();
+  var dims=pageDims(o.orient), PW=dims[0], PH=dims[1];
+
+  var pages;
+  try{ pages=(o.fit==="one")?buildSingle(o):buildPaged(o); }
+  catch(e){
+    box.appendChild(el("div","pv-note","تعذر تجهيز المعاينة"));
+    $("#pvCount").textContent="—";
+    return;
+  }
+
+  var w=box.clientWidth-22;
+  if(!(w>60)) w=280;
+  var sw=w/PW, m=14;
+
+  pages.forEach(function(p){
+    var rect=p.getBoundingClientRect();
+    var r=Math.min((PW-m*2)/rect.width,(PH-m*2)/rect.height);
+    var holder=el("div","pv-page");
+    holder.style.width=Math.round(w)+"px";
+    holder.style.height=Math.round(PH*sw)+"px";
+    p.style.position="absolute";
+    p.style.left=Math.round((PW-rect.width*r)/2*sw)+"px";
+    p.style.top=Math.round((PH-rect.height*r)/2*sw)+"px";
+    p.style.transform="scale("+(r*sw)+")";
+    holder.appendChild(p);
+    box.appendChild(holder);
+  });
+
+  $("#pvCount").textContent = pages.length===1 ? "صفحة واحدة" : (pages.length+" صفحات");
+  $("#pdfStage").textContent="";
+}
+
+$("#pdfBtn").addEventListener("click",function(){
+  $("#pdfModal").hidden=false;
+  syncColsHint();
+  refreshPreview();
+  $("#pdfGo").focus();
+});
+$("#printBtn").addEventListener("click",function(){
+  try{window.print();}catch(e){toast("تعذر فتح الطباعة");}
+});
+$("#pdfCancel").addEventListener("click",function(){$("#pdfModal").hidden=true;});
+$("#pdfModal").addEventListener("click",function(e){
+  if(e.target===$("#pdfModal")) $("#pdfModal").hidden=true;
+});
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Escape") return;
+  if(!$("#askModal").hidden){closeAsk(false); return;}
+  if(!$("#pdfModal").hidden) $("#pdfModal").hidden=true;
+});
+Array.prototype.forEach.call(document.querySelectorAll('#pdfModal input[type="radio"]'),function(r){
+  r.addEventListener("change",function(){syncColsHint(); refreshPreview();});
+});
+$("#pdfGo").addEventListener("click",function(){
+  var o=readOpts();
+  pdfOpts=o;
+  $("#pdfModal").hidden=true;
+  setTimeout(function(){exportPdf(o);},60);
+});
+
+
+$("#resetBtn").addEventListener("click",function(){
+  ask("استرجاع البيانات الأصلية؟ كل التعديلات الحالية بتنحذف.","استرجاع").then(function(ok){
+    if(!ok) return;
+    state=clone(seed);
+    save(); render(); toast("تم الاسترجاع");
+  });
+});
+
+/* ---------- logo ---------- */
+$("#logo").addEventListener("click",function(){ if(editing()) $("#logoInput").click(); });
+$("#logoInput").addEventListener("change",function(e){
+  var f=e.target.files&&e.target.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      var max=320, sc=Math.min(1,max/img.width);
+      var c=document.createElement("canvas");
+      c.width=Math.max(1,Math.round(img.width*sc));
+      c.height=Math.max(1,Math.round(img.height*sc));
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      try{state.logo=c.toDataURL("image/png");}catch(err){state.logo=rd.result;}
+      save(); render(); toast("تم تحديث الشعار");
+    };
+    img.onerror=function(){toast("تعذر قراءة الصورة");};
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(f);
+  e.target.value="";
+});
+
+/* ---------- download a standalone copy ---------- */
+function buildStandalone(){
+  var doc=document.documentElement.cloneNode(true);
+  var s=doc.querySelector("#seed");
+  if(s) s.textContent=JSON.stringify(state);
+  var b=doc.querySelector("#board"); if(b) b.textContent="";
+  var sh=doc.querySelector("#shifts"); if(sh) sh.textContent="";
+  var tz=doc.querySelector("#toast"); if(tz) tz.textContent="";
+  return "<!DOCTYPE html>\n"+doc.outerHTML;
+}
+$("#saveFile").addEventListener("click",function(){
+  var html=buildStandalone();
+  var name="خطة-العمل.html";
+  function fallback(){
+    try{
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(new Blob([html],{type:"text/html;charset=utf-8"}));
+      a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+      toast("تم تجهيز النسخة");
+    }catch(e){toast("التنزيل غير متاح هنا");}
+  }
+  if(window.claude&&window.claude.use){
+    window.claude.use("downloads").then(function(d){
+      if(!d) return fallback();
+      d.save({filename:name,data:html})
+       .then(function(){toast("تم تنزيل النسخة");})
+       .catch(function(err){ if(!err||err.code!=="declined") fallback(); });
+    }).catch(fallback);
+  }else fallback();
+});
+
+/* ---------- boot ---------- */
+render();
+setStatus(idleStatus(),true);
+
+if(window.claude&&window.claude.use){
+  window.claude.use("db").then(function(db){
+    if(!db) return;
+    remote=db.doc("plan/current");
+    return remote.get().then(function(snap){
+      if(snap.exists){
+        var d=snap.data();
+        if(d&&typeof d.payload==="string"){
+          try{
+            var parsed=JSON.parse(d.payload);
+            if(parsed&&parsed.sections){state=parsed; render();}
+          }catch(e){}
+        }
+      }else{
+        return persist();
+      }
+    }).then(function(){setStatus(idleStatus(),true);});
+  }).catch(function(){ remote=null; setStatus(idleStatus(),true); });
+}
+})();
+</script>
+</body>
+</html>
